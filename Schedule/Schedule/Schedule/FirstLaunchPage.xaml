@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Schedule.FirstLaunchPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Факультет"></Label>
+            <Picker Title="Выберите факультет..." x:Name="facultyPicker"></Picker>
+            <Label Text="Форма обучения"></Label>
+            <Picker Title="Выберите форму обучения..." x:Name="departmentPicker"></Picker>
+            <Label Text="Выберите курс..."></Label>
+            <Stepper Value="1" Minimum="1" Maximum="5" Increment="1" x:Name="treatiseSelector"></Stepper>
+            <Label Text="Группа"></Label>
+            <Picker Title="Выберите группу..." x:Name="groupPicker" IsEnabled="False"></Picker>
+            <Button x:Name="getSchedule" Text="Получить расписание..." Clicked="getSchedule_Clicked"></Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
