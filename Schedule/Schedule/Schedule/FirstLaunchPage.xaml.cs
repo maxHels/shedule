@@ -70,8 +70,8 @@ namespace Schedule
         {
             //DependencyService.Get<IService>().Start(finalURL);
             thisSchedule = DependencyService.Get<IService>().GetGroupSchedule(finalURL);
-            //await Navigation.PushAsync(new ScheduleViewingPage(thisSchedule));
-            await Navigation.PushAsync(new PageWithList(thisSchedule.days[0].lessons, ""));
+            await Navigation.PushAsync(new ScheduleViewingPage(thisSchedule));
+            //await Navigation.PushAsync(new PageWithList(thisSchedule.days[0].lessons, ""));
         }
     }
 }

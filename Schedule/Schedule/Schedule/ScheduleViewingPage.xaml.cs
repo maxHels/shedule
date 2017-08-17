@@ -17,11 +17,11 @@ namespace Schedule
         {
             InitializeComponent();
             this.schedule = schedule;
-            //foreach(Day d in schedule.days)
-            //{
-            //    Children.Add(new PageWithList(d.lessons, d.date));
-            //}
-            Children.Add(new PageWithList(schedule.days[0].lessons, ""));
+            foreach (Day d in schedule.days)
+            {
+                Children.Add(new PageWithList(d.lessons, d.date));
+            }
+            //Children.Add(new PageWithList(schedule.days[0].lessons, ""));
         }
 
         
