@@ -21,7 +21,6 @@ namespace Schedule
             {
                 Children.Add(new PageWithList(d.lessons, d.date));
             }
-            //Children.Add(new PageWithList(schedule.days[0].lessons, ""));
         }
 
         
