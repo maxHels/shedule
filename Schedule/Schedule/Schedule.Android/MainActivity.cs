@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Android.Content;
 
 namespace Schedule.Droid
 {
@@ -18,6 +19,8 @@ namespace Schedule.Droid
 			ToolbarResource = Resource.Layout.Toolbar; 
 
 			base.OnCreate (bundle);
+
+            //StartService(new Intent(this, typeof(ScheduleService)));
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 			LoadApplication (new Schedule.App ());

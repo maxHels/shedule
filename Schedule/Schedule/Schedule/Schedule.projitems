@@ -17,21 +17,17 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)GroupSchedule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ForJSonParsing.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GroupScheduleGetter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JSONParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MainPage.xaml.cs">
-      <DependentUpon>MainPage.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PageWithList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RequestSender.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ScheduleCell.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ScheduleViewingPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MainPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>

@@ -20,69 +20,59 @@ namespace Schedule.Droid
     [Service]
     class ScheduleService : Service, IService
     {
-        private string URL;
-        private GroupSchedule schedule;
-        string oldJSON;
-        Context context = Forms.Context;
+        Context context;
+        Timer timer;
+        GroupSchedule oldSchedule, newSchedule;
         
-        public GroupSchedule Schedule { get => schedule; }
 
         public override IBinder OnBind(Intent intent)
         {
             throw new NotImplementedException();
         }
 
-        public override void OnCreate()
+        //[return: GeneratedEnum]
+        public override StartCommandResult OnStartCommand(Intent intent, /*[GeneratedEnum]*/ StartCommandFlags flags, int startId)
         {
-            base.OnCreate();    
+            Start();
+            return StartCommandResult.Sticky;
         }
 
-        
-
-        public GroupSchedule GetGroupSchedule(string URL)
+        public override void OnDestroy()
         {
-            //OnCreate();
-            RequestSender requestSender = new RequestSender();
-            JSONParser parser = new JSONParser();
-            schedule = parser.JSONToObjectParsing<GroupSchedule>(requestSender.sendRequest(URL));
-            //Start(URL);
-            return schedule;
-        }
-
-        private bool scheduleComparing(string JSON)
-        {
-            if (JSON != oldJSON)
-            {
-                oldJSON = JSON;
-                return false;
-            }
-            else
-                return true;
+            timer.Dispose();
+            base.OnDestroy();
         }
 
         private void Notificator()
         {
-            //if (!scheduleComparing(new RequestSender().sendRequest(URL)))
-            //{
+            context = this;
+            if (context != null)
+            {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-                builder.SetSmallIcon(Droid.Resource.Drawable.notification_template_icon_bg).
-                    SetContentTitle("Расписание обновлено!").SetContentText("Добавлены новые пары!");
-                NotificationManager manager =(NotificationManager)context.GetSystemService(Service.NotificationService);
+                builder.SetSmallIcon(Droid.Resource.Drawable.Icon).
+                    SetContentTitle("Расписание обновлено!").SetContentText("Добавлены новые пары!").SetVibrate(new long[] { 1000, 1000 });
+                NotificationManager manager = (NotificationManager)context.GetSystemService(Service.NotificationService);
                 Notification not = builder.Build();
-                manager.Notify();
-            //}
+                manager.Notify(0, not);
+            }
         }
 
-        public void Start(string URL)
+        public void Start()
         {
-            this.URL = URL;
-            Timer timer = new Timer(15000);
+            timer = new Timer(7000);
+            timer.Start();
+            timer.AutoReset = true;
             timer.Elapsed += Timer_Elapsed;
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Notificator();
+        }
+
+        public GroupSchedule GetGroupSchedule(string URL)
+        {
+            throw new NotImplementedException();
         }
     }
 }

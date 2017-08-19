@@ -8,22 +8,29 @@ namespace Schedule
         public ScheduleCell()
         {
             title = new Label();
+            title.HorizontalTextAlignment = TextAlignment.Center;
             descr = new Label();
+            descr.HorizontalTextAlignment = TextAlignment.End;
             startTime = new Label();
+            startTime.HorizontalTextAlignment = TextAlignment.Start;
             finishTime = new Label();
+            finishTime.HorizontalTextAlignment = TextAlignment.Start;
             teacher = new Label();
+            teacher.HorizontalTextAlignment = TextAlignment.Center;
             address = new Label();
+            address.HorizontalTextAlignment = TextAlignment.Center;
             room = new Label();
+            room.HorizontalTextAlignment = TextAlignment.End; 
 
-            
             Grid cell = new Grid();
-            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
-            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(6, GridUnitType.Star) });
-            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
-            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
-            cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(8,GridUnitType.Star)});
-            cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
-            cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(5, GridUnitType.Star) });
+            
+            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            cell.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            cell.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            cell.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             cell.Children.Add(startTime, 0, 0);
             cell.Children.Add(finishTime, 0, 1);
             cell.Children.Add(title, 1, 0);
@@ -97,3 +104,13 @@ namespace Schedule
         }
     }
 }
+
+
+
+//cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
+//cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(6, GridUnitType.Star) });
+//cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
+//cell.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(2, GridUnitType.Star) });
+//cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(8,GridUnitType.Star)});
+//cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(2, GridUnitType.Star) });
+//cell.RowDefinitions.Add(new RowDefinition { Height = new GridLength(5, GridUnitType.Star) });

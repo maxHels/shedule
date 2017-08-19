@@ -13,10 +13,10 @@ namespace Schedule
     public partial class ScheduleViewingPage : TabbedPage
     {
         GroupSchedule schedule;
-        public ScheduleViewingPage (GroupSchedule schedule)
+        public ScheduleViewingPage (string URL)
         {
             InitializeComponent();
-            this.schedule = schedule;
+            schedule = new GroupScheduler().GetSchedule(URL);
             foreach (Day d in schedule.days)
             {
                 Children.Add(new PageWithList(d.lessons, d.date));

@@ -64,13 +64,14 @@ namespace Schedule
             }
         }
 
-        
+
+
+
 
         private async void getSchedule_Clicked(object sender, EventArgs e)
         {
-            //DependencyService.Get<IService>().Start(finalURL);
-            thisSchedule = DependencyService.Get<IService>().GetGroupSchedule(finalURL);
-            await Navigation.PushAsync(new ScheduleViewingPage(thisSchedule));
+            App.Current.Properties["GroupURL"] = finalURL;
+            await Navigation.PushAsync(new ScheduleViewingPage(finalURL));
         }
     }
 }
