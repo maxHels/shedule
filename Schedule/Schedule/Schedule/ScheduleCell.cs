@@ -20,9 +20,37 @@ namespace Schedule
             address = new Label();
             address.HorizontalTextAlignment = TextAlignment.Center;
             room = new Label();
-            room.HorizontalTextAlignment = TextAlignment.End; 
-            
-            
+            room.HorizontalTextAlignment = TextAlignment.End;
+
+            StackLayout cell = new StackLayout();
+            StackLayout firstLay = new StackLayout()
+            {
+                Orientation = StackOrientation.Horizontal,
+            };
+            StackLayout secLay = new StackLayout()
+            {
+                Orientation = StackOrientation.Horizontal,
+            };
+            StackLayout thirdLay = new StackLayout()
+            {
+                Orientation = StackOrientation.Horizontal,
+            };
+
+            firstLay.Children.Add(startTime);
+            firstLay.Children.Add(title);
+            firstLay.Children.Add(descr);
+
+            secLay.Children.Add(teacher);
+
+            thirdLay.Children.Add(finishTime);
+            thirdLay.Children.Add(address);
+            thirdLay.Children.Add(room);
+
+            cell.Children.Add(firstLay);
+            cell.Children.Add(secLay);
+            cell.Children.Add(thirdLay);
+
+            View = cell;
 
         }
 
