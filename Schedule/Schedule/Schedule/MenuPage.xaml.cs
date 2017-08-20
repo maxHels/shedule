@@ -15,7 +15,7 @@ namespace Schedule
 		public MenuPage ()
 		{
             var masterPage = new MasterPage();
-            if (!Application.Current.Properties.ContainsKey("GroupURL"))
+            if (Application.Current.Properties.ContainsKey("GroupURL"))
             {
                 Master = masterPage;
                 Title = "Menu";
@@ -23,9 +23,9 @@ namespace Schedule
             }
             else
             {
-                Master = new ScheduleViewingPage();
+                Master = masterPage;
                 Title = "Menu";
-                Detail = masterPage;
+                Detail = new FirstLaunchPage();
             }
             masterPage.ListView.ItemTapped += OnItemTapped;
 			InitializeComponent();

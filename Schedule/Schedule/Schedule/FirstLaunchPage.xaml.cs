@@ -71,9 +71,6 @@ namespace Schedule
         private async void getSchedule_Clicked(object sender, EventArgs e)
         {
             Application.Current.Properties["GroupURL"] = finalURL;
-            GroupScheduler s = new GroupScheduler();
-            List<Lesson> l = s.EditedLessons(s.GetSchedule(finalURL),
-                s.GetSchedule("http://api.grsu.by/1.x/app2/getGroupSchedule?groupId=5146&dateStart=21.02.2017&dateEnd=26.02.2017"));
             await Navigation.PushAsync(new ScheduleViewingPage());
         }
     }

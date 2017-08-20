@@ -49,19 +49,32 @@ namespace Schedule.Droid
             if (context != null)
             {
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-                builder.SetSmallIcon(Droid.Resource.Drawable.Icon).
-                    SetContentTitle("Расписание обновлено!").SetContentText("Добавлены новые пары!").SetVibrate(new long[] { 1000, 1000 });
-                NotificationManager manager = (NotificationManager)context.GetSystemService(Service.NotificationService);
-                Notification not = builder.Build();
-                manager.Notify(0, not);
+                    GroupScheduler scheduler = new GroupScheduler();
+                    List<Lesson> addedLessons = scheduler.EditedLessons(scheduler.
+                        GetSchedule("http://api.grsu.by/1.x/app2/getGroupSchedule?groupId=5146&dateStart=21.02.2017&dateEnd=26.02.2017"),
+                        scheduler.GetSchedule("http://api.grsu.by/1.x/app2/getGroupSchedule?groupId=5146&dateStart=23.02.2017&dateEnd=01.03.2017"));
+                    string summary = "and " + (addedLessons.Count - 2).ToString() + " more";
+                    Notification notification = new Notification.Builder(context)
+                         .SetContentTitle("Расписание обновлено")
+                         .SetContentText("Добавлены пары")
+                         .SetSmallIcon(Resource.Drawable.Icon)
+                         .SetStyle(new Notification.InboxStyle()
+                             .AddLine(addedLessons.ElementAt(0).title)
+                             .AddLine(addedLessons.ElementAt(1).title)
+                             .SetBigContentTitle("")
+                             .SetSummaryText("+3 more"))
+                         .Build();
+                    NotificationManager manager = (NotificationManager)context.GetSystemService(Service.NotificationService);
+                    Notification not = builder.Build();
+                    manager.Notify(0, notification);
             }
         }
 
         public void Start()
         {
-            timer = new Timer(7000);
+            timer = new Timer(15000);
             timer.Start();
-            timer.AutoReset = true;
+            timer.AutoReset = false;
             timer.Elapsed += Timer_Elapsed;
         }
 

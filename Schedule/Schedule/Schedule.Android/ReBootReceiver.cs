@@ -14,7 +14,7 @@ using Android;
 namespace Schedule.Droid
 {
     [BroadcastReceiver(Enabled = true,Exported = true)]
-    //[IntentFilter(new[] { Intent.ActionBootCompleted})]
+    [IntentFilter(new[] { Intent.ActionBootCompleted})]
     public class ReBootReceiver : BroadcastReceiver
     {
         public override void OnReceive(Context context, Intent intent)
