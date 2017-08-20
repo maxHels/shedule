@@ -21,14 +21,17 @@ namespace Schedule
                 Icon="calendar.png"
             };
 
-            string URL =(string)Application.Current.Properties["GroupURL"];
-
-            ToolbarItems.Add(calendarItem);
-
-            schedule = new GroupScheduler().GetSchedule(URL);
-            foreach (Day d in schedule.days)
+            if (Application.Current.Properties.ContainsKey("GroupURL"))
             {
-                Children.Add(new PageWithList(d.lessons, d.date));
+                string URL = (string)Application.Current.Properties["GroupURL"];
+
+                ToolbarItems.Add(calendarItem);
+
+                schedule = new GroupScheduler().GetSchedule(URL);
+                foreach (Day d in schedule.days)
+                {
+                    Children.Add(new PageWithList(d.lessons, d.date));
+                }
             }
         }
     }

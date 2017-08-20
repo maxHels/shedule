@@ -8,7 +8,7 @@
             <ListView x:Name="listView" VerticalOptions="FillAndExpand" SeparatorVisibility="None">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextCell Text="{Binding Title}" Detail="{Binding Detail}" TextColor="LightPink"></TextCell>
+                        <TextCell Text="{Binding Title}" Detail="{Binding Detail}" TextColor="Pink"></TextCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
