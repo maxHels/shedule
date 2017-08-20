@@ -21,26 +21,9 @@ namespace Schedule
             address.HorizontalTextAlignment = TextAlignment.Center;
             room = new Label();
             room.HorizontalTextAlignment = TextAlignment.End; 
-
-            Grid cell = new Grid();
             
-            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            cell.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-            cell.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            cell.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            cell.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-            cell.Children.Add(startTime, 0, 0);
-            cell.Children.Add(finishTime, 0, 1);
-            cell.Children.Add(title, 1, 0);
-            cell.Children.Add(descr, 2, 0);
-            cell.Children.Add(teacher, 1, 1);
-            cell.Children.Add(address, 1, 2);
-            cell.Children.Add(room, 2, 2);
+            
 
-
-            View = cell;
         }
 
 

@@ -20,6 +20,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)GroupScheduleGetter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JSONParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MasterPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)MasterPageItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MenuPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)PageWithList.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RequestSender.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ScheduleCell.cs" />
@@ -40,6 +47,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)ScheduleViewingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MenuPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MasterPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

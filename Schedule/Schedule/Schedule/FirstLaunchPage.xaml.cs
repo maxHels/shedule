@@ -70,8 +70,8 @@ namespace Schedule
 
         private async void getSchedule_Clicked(object sender, EventArgs e)
         {
-            App.Current.Properties["GroupURL"] = finalURL;
-            await Navigation.PushAsync(new ScheduleViewingPage(finalURL));
+            Application.Current.Properties["GroupURL"] = finalURL;
+            await Navigation.PushAsync(new ScheduleViewingPage());
         }
     }
 }

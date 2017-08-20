@@ -12,11 +12,7 @@ namespace Schedule
 		public App ()
 		{
 			InitializeComponent();
-
-            if (!Current.Properties.ContainsKey("GroupURL"))
-                MainPage = new NavigationPage(new FirstLaunchPage());
-            else
-                MainPage = new NavigationPage(new ScheduleViewingPage((string)Current.Properties["GroupURL"]));
+            MainPage = new NavigationPage(new MenuPage());
         }
 
 		protected override void OnStart ()
