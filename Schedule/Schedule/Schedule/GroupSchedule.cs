@@ -8,11 +8,6 @@ namespace Schedule
         {
             public int count { get; set; }
             public Day[] days { get; set; }
-
-            public override bool Equals(object obj)
-            {
-                return base.Equals(obj);
-            }
         }
 
         public class Day
@@ -21,11 +16,6 @@ namespace Schedule
             public int count { get; set; }
             public string date { get; set; }
             public Lesson[] lessons { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as Day);
-        }
 
         private bool Equals(Day d)
         {
@@ -49,11 +39,6 @@ namespace Schedule
             public string address { get; set; }
             public string room { get; set; }
             public Subgroup subgroup { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as Lesson);
-        }
 
         private bool Equals(Lesson l)
         {

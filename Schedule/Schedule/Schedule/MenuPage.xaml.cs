@@ -17,9 +17,10 @@ namespace Schedule
             var masterPage = new MasterPage();
             if (Application.Current.Properties.ContainsKey("GroupURL"))
             {
+                GroupSchedule schedule = new GroupScheduler().GetSchedule((string)Application.Current.Properties["GroupURL"]);
                 Master = masterPage;
                 Title = "Menu";
-                Detail = new ScheduleViewingPage();
+                Detail = new ScheduleViewingPage(schedule);
             }
             else
             {

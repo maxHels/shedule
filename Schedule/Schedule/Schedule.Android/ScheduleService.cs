@@ -30,9 +30,12 @@ namespace Schedule.Droid
             throw new NotImplementedException();
         }
 
-        //[return: GeneratedEnum]
         public override StartCommandResult OnStartCommand(Intent intent, /*[GeneratedEnum]*/ StartCommandFlags flags, int startId)
         {
+            if (App.Current.Properties.ContainsKey("LastUpdated"))
+            {
+                //if ()
+            }
             Start();
             return StartCommandResult.Sticky;
         }
@@ -53,7 +56,7 @@ namespace Schedule.Droid
                     List<Lesson> addedLessons = scheduler.EditedLessons(scheduler.
                         GetSchedule("http://api.grsu.by/1.x/app2/getGroupSchedule?groupId=5146&dateStart=21.02.2017&dateEnd=26.02.2017"),
                         scheduler.GetSchedule("http://api.grsu.by/1.x/app2/getGroupSchedule?groupId=5146&dateStart=23.02.2017&dateEnd=01.03.2017"));
-                    string summary = "and " + (addedLessons.Count - 2).ToString() + " more";
+                    string summary = "и " + (addedLessons.Count - 2).ToString() + " ещё";
                     Notification notification = new Notification.Builder(context)
                          .SetContentTitle("Расписание обновлено")
                          .SetContentText("Добавлены пары")
@@ -62,7 +65,7 @@ namespace Schedule.Droid
                              .AddLine(addedLessons.ElementAt(0).title)
                              .AddLine(addedLessons.ElementAt(1).title)
                              .SetBigContentTitle("")
-                             .SetSummaryText("+3 more"))
+                             .SetSummaryText(summary))
                          .Build();
                     NotificationManager manager = (NotificationManager)context.GetSystemService(Service.NotificationService);
                     Notification not = builder.Build();
@@ -72,7 +75,7 @@ namespace Schedule.Droid
 
         public void Start()
         {
-            timer = new Timer(15000);
+            timer = new Timer(14400000);
             timer.Start();
             timer.AutoReset = false;
             timer.Elapsed += Timer_Elapsed;
@@ -80,7 +83,7 @@ namespace Schedule.Droid
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Notificator();
+            App.Current.Properties["LastUpdated"] = DateTime.Now;
         }
 
         public GroupSchedule GetGroupSchedule(string URL)

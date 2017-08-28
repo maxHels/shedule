@@ -47,6 +47,5 @@ namespace Schedule
             }
             return editedLessons;
         }
-
     }
 }

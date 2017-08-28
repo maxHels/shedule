@@ -12,27 +12,14 @@ namespace Schedule
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ScheduleViewingPage : TabbedPage
     {
-        GroupSchedule schedule;
-        public ScheduleViewingPage ()
+        public ScheduleViewingPage (GroupSchedule schedule)
         {
             InitializeComponent();
-            var calendarItem = new ToolbarItem
+            foreach (Day d in schedule.days)
             {
-                Icon="calendar.png"
-            };
-
-            if (Application.Current.Properties.ContainsKey("GroupURL"))
-            {
-                string URL = (string)Application.Current.Properties["GroupURL"];
-
-                ToolbarItems.Add(calendarItem);
-
-                schedule = new GroupScheduler().GetSchedule(URL);
-                foreach (Day d in schedule.days)
-                {
-                    Children.Add(new PageWithList(d.lessons, d.date));
-                }
+                Children.Add(new PageWithList(d.lessons, d.date));
             }
         }
+
     }
 }

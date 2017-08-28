@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Schedule.FirstLaunchPage">
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout x:Name="mainLayout">
             <Label Text="Факультет"></Label>
             <Picker Title="Выберите факультет..." x:Name="facultyPicker"></Picker>
             <Label Text="Форма обучения"></Label>
