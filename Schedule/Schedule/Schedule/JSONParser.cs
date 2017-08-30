@@ -9,18 +9,29 @@ namespace Schedule
     {
         public T JSONToObjectParsing<T>  (string JSON)
         {
-            T temp;
-            temp = JsonConvert.DeserializeObject<T>(JSON);
-            return temp;
+            if (JSON != null)
+            {
+                T temp;
+                temp = JsonConvert.DeserializeObject<T>(JSON);
+                return temp;
+            }
+            else
+            {
+                return default(T);
+            }
         }
         public List<string> ToListWithoutId(JSONArray arr)
         {
             List<string> list = new List<string>();
-            foreach (JSONItem i in arr.items)
+            if (arr != null)
             {
-                list.Add(i.title);
+                foreach (JSONItem i in arr.items)
+                {
+                    list.Add(i.title);
+                }
+                return list;
             }
-            return list;
+            return null;
         }
     }
 }

@@ -22,22 +22,36 @@ namespace Schedule.Droid
     {
         Context context;
         Timer timer;
-        GroupSchedule oldSchedule, newSchedule;
-        
 
         public override IBinder OnBind(Intent intent)
         {
             throw new NotImplementedException();
         }
 
-        public override StartCommandResult OnStartCommand(Intent intent, /*[GeneratedEnum]*/ StartCommandFlags flags, int startId)
+        public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
+        {
+            context = this;
+            Checker();
+            Start();
+            Notification notification = new Notification.Builder(context)
+                                .SetContentTitle("Расписание обновлено")
+                                .SetContentTitle("Сервис запущен")
+                                .SetSmallIcon(Resource.Drawable.Icon)
+                                .Build();
+            NotificationManager m = (NotificationManager)context.GetSystemService(Service.NotificationService);
+            m.Notify(0, notification);
+            return StartCommandResult.Sticky;
+        }
+
+        private void Checker()
         {
             if (App.Current.Properties.ContainsKey("LastUpdated"))
             {
-                //if ()
+                TimeSpan interval = new TimeSpan(4, 0, 0);
+                TimeSpan difference = DateTime.Now.Subtract((DateTime)App.Current.Properties["LastUpdated"]);
+                if (difference >= interval)
+                    Notificator();
             }
-            Start();
-            return StartCommandResult.Sticky;
         }
 
         public override void OnDestroy()
@@ -49,41 +63,84 @@ namespace Schedule.Droid
         private void Notificator()
         {
             context = this;
-            if (context != null)
+
+            if (DependencyService.Get<IScheduleSaver>().ExistAsync("schedule.sch"))
             {
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-                    GroupScheduler scheduler = new GroupScheduler();
-                    List<Lesson> addedLessons = scheduler.EditedLessons(scheduler.
-                        GetSchedule("http://api.grsu.by/1.x/app2/getGroupSchedule?groupId=5146&dateStart=21.02.2017&dateEnd=26.02.2017"),
-                        scheduler.GetSchedule("http://api.grsu.by/1.x/app2/getGroupSchedule?groupId=5146&dateStart=23.02.2017&dateEnd=01.03.2017"));
-                    string summary = "и " + (addedLessons.Count - 2).ToString() + " ещё";
-                    Notification notification = new Notification.Builder(context)
-                         .SetContentTitle("Расписание обновлено")
-                         .SetContentText("Добавлены пары")
-                         .SetSmallIcon(Resource.Drawable.Icon)
-                         .SetStyle(new Notification.InboxStyle()
-                             .AddLine(addedLessons.ElementAt(0).title)
-                             .AddLine(addedLessons.ElementAt(1).title)
-                             .SetBigContentTitle("")
-                             .SetSummaryText(summary))
-                         .Build();
-                    NotificationManager manager = (NotificationManager)context.GetSystemService(Service.NotificationService);
-                    Notification not = builder.Build();
-                    manager.Notify(0, notification);
+                GroupScheduler scheduler = new GroupScheduler();
+                List<Lesson> addedLessons = new List<Lesson>();
+                GroupSchedule oldSchedule = DependencyService.Get<IScheduleSaver>().LoadScheduleAsync("schedule.sch");
+                string URL = scheduler.MakeGroupURL((string)App.Current.Properties["GroupURL"]);
+                GroupSchedule refreshedSchedule = scheduler.GetSchedule(URL);
+                addedLessons = scheduler.EditedLessons(oldSchedule, refreshedSchedule);
+                App.Current.Properties["LastUpdated"] = DateTime.Now;
+
+                if (addedLessons.Count != 0)
+                {
+                    DependencyService.Get<IScheduleSaver>().SaveScheduleAsync("schedule.sch", refreshedSchedule);
+                    if (addedLessons.Count >= 3)
+                    {
+                        string summary = "и ещё "+(addedLessons.Count - 4).ToString()+" пары";
+                        Notification notification = new Notification.Builder(context)
+                             .SetContentTitle("Расписание обновлено")
+                             .SetContentText("Добавлены пары")
+                             .SetSmallIcon(Resource.Drawable.Icon)
+                             .SetStyle(new Notification.InboxStyle()
+                                 .AddLine(addedLessons.ElementAt(0).title)
+                                 .AddLine(addedLessons.ElementAt(1).title)
+                                 .AddLine(addedLessons.ElementAt(2).title)
+                                 .AddLine(addedLessons.ElementAt(3).title)
+                                 .SetBigContentTitle("")
+                                 .SetSummaryText(summary))
+                             .Build();
+                        NotificationManager manager = (NotificationManager)context.GetSystemService(Service.NotificationService);
+                        manager.Notify(0, notification);
+                    }
+                    if (addedLessons.Count < 3 && addedLessons.Count > 0)
+                    {
+                        NotificationManager m = NotificationManager.FromContext(context);
+                        if (addedLessons.Count == 1)
+                        {
+                            Notification notification = new Notification.Builder(context)
+                                .SetContentTitle("Расписание обновлено")
+                                .SetContentTitle(addedLessons.ElementAt(0).title)
+                                .SetSmallIcon(Resource.Drawable.Icon)
+                                .Build();
+                            m.Notify(0, notification);
+                        }
+                        else
+                        {
+                            Notification notification = new Notification.Builder(context)
+                                .SetContentTitle("Расписание обновлено")
+                                .SetContentTitle(addedLessons.ElementAt(0).title + " и\n " + addedLessons.ElementAt(1).title)
+                                .SetSmallIcon(Resource.Drawable.Icon)
+                                .Build();
+                            m.Notify(0, notification);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Notification notification = new Notification.Builder(context)
+                             .SetContentTitle("Расписание обновлено")
+                             .SetContentText("Пар добавлено не было")
+                             .SetSmallIcon(Resource.Drawable.Icon).Build();
+                NotificationManager manager = (NotificationManager)context.GetSystemService(Service.NotificationService);
+                manager.Notify(0, notification);
             }
         }
 
         public void Start()
         {
-            timer = new Timer(14400000);
+            timer = new Timer(180000);
             timer.Start();
-            timer.AutoReset = false;
+            timer.AutoReset = true;
             timer.Elapsed += Timer_Elapsed;
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            App.Current.Properties["LastUpdated"] = DateTime.Now;
+            Checker();
         }
 
         public GroupSchedule GetGroupSchedule(string URL)

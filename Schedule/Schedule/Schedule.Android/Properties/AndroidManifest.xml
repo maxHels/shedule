@@ -2,5 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 	<uses-sdk android:minSdkVersion="15" />
   <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
+  <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 	<application android:label="Schedule.Android"></application>
 </manifest>

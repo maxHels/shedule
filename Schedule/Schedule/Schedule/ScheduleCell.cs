@@ -89,13 +89,13 @@ namespace Schedule
             cell.Children.Add(temlateCell);
             cell.Children.Add(teacher);
 
-            var progrBar = new ProgressBar()
-            {
-                Progress=0.5,
+            //var progrBar = new ProgressBar()
+            //{
+            //    Progress=0.5,
 
-            };
+            //};
 
-            cell.Children.Add(progrBar);
+            //cell.Children.Add(progrBar);
 
             View = cell;
 

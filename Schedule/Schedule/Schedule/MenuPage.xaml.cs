@@ -14,18 +14,19 @@ namespace Schedule
 	{
 		public MenuPage ()
 		{
-            var masterPage = new MasterPage();
-            if (Application.Current.Properties.ContainsKey("GroupURL"))
+            var masterPage = new MasterPage()
             {
-                GroupSchedule schedule = new GroupScheduler().GetSchedule((string)Application.Current.Properties["GroupURL"]);
-                Master = masterPage;
-                Title = "Menu";
-                Detail = new ScheduleViewingPage(schedule);
+                Title="Меню",
+            };
+            Master = masterPage;
+            if (Application.Current.Properties.ContainsKey("GroupURL"))
+            {   
+                Title = "Расписание";
+                Detail = new ScheduleViewingPage();
             }
             else
             {
-                Master = masterPage;
-                Title = "Menu";
+                Title = "Выбор группы";
                 Detail = new FirstLaunchPage();
             }
             masterPage.ListView.ItemTapped += OnItemTapped;
@@ -35,8 +36,10 @@ namespace Schedule
         private void OnItemTapped(object sender, ItemTappedEventArgs e)
         {
             var item = e.Item as MasterPageItem;
+            Title = item.Title;
             Detail = (Page)Activator.CreateInstance(item.TargetType); 
             IsPresented = false;
+
         }
     }
 }

@@ -101,16 +101,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlarmSetter.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="NativeFeatures.cs" />
     <Compile Include="ReBootReceiver.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduleSaver.cs" />
     <Compile Include="ScheduleService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
+    <AndroidResource Include="Resources\layout\loading.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\Icon.png" />
@@ -125,6 +131,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\calendar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\clock.png" />
   </ItemGroup>
   <Import Project="..\Schedule\Schedule.projitems" Label="Shared" Condition="Exists('..\Schedule\Schedule.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

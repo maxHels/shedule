@@ -17,7 +17,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)GroupSchedule.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ForJSonParsing.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)GroupScheduleGetter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GroupScheduler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IAlarm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)INative.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IScheduleSaver.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IService.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JSONParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MasterPage.xaml.cs">

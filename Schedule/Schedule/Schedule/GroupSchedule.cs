@@ -4,12 +4,13 @@ using System.Text;
 
 namespace Schedule
 {
+        [Serializable]
         public class GroupSchedule
         {
             public int count { get; set; }
             public Day[] days { get; set; }
         }
-
+        [Serializable]
         public class Day
         {
             public string num { get; set; }
@@ -28,7 +29,7 @@ namespace Schedule
             return (date == d.date) && (count == count);
         }
     }
-
+        [Serializable]
         public class Lesson
         {
             public string timeStart { get; set; }
@@ -51,14 +52,14 @@ namespace Schedule
             return (timeStart == l.timeStart) && (timeEnd == l.timeEnd) && (title == l.title) && (address == l.address) && (room == l.room);
         }
     }
-
+        [Serializable]
         public class Teacher
         {
             public string id { get; set; }
             public string fullname { get; set; }
             public string post { get; set; }
         }
-
+        [Serializable]
         public class Subgroup
         {
             public string id { get; set; }
