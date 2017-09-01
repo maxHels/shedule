@@ -19,19 +19,25 @@ namespace Schedule
             {
                 ToolbarItem alarmSet = new ToolbarItem()
                 {
-                    Icon="clock.png",
+                    Icon = "clock.png",
                 };
                 alarmSet.Clicked += AlarmSet;
                 ToolbarItems.Add(alarmSet);
-                TimeSpan tp = new TimeSpan(1, 0, 0);
-                DateTime oldtime = (DateTime)Application.Current.Properties["LastUpdated"];
-                DateTime thistime = DateTime.Now;
-                if (thistime - oldtime <= tp &&
-                    DependencyService.Get<IScheduleSaver>().ExistAsync("schedule.sch")
+
+
+                if (DependencyService.Get<IScheduleSaver>().Exist("schedule.sch")
                     && Application.Current.Properties.ContainsKey("LastGroupChoice")
-                    && (string)Application.Current.Properties["LastGroupChoice"] == (string)Application.Current.Properties["GroupURL"])
+                    && (string)Application.Current.Properties["LastGroupChoice"] == DependencyService.Get<IScheduleSaver>().
+                    LoadText("groupURL.txt")&&
+                    DependencyService.Get<IScheduleSaver>().Exist("LastUpdated.date"))
                 {
-                    GetFromMemory();
+                    TimeSpan tp = new TimeSpan(1, 0, 0);
+                    DateTime oldtime = DependencyService.Get<IScheduleSaver>().LoadSavedObject<DateTime>("LastUpdated.date");
+                    DateTime thistime = DateTime.Now;
+                    if (tp >= oldtime - thistime)
+                        GetFromMemory();
+                    else
+                        GetFromServer();
                 }
                 else
                 {
@@ -53,15 +59,15 @@ namespace Schedule
         private void GetFromServer()
         {
             GroupScheduler scheduler = new GroupScheduler();
-            string finalURL = (string)Application.Current.Properties["GroupURL"];
+            string finalURL = DependencyService.Get<IScheduleSaver>().LoadText("groupURL.txt");
             Application.Current.Properties["LastGroupChoice"] = finalURL;
             finalURL = scheduler.MakeGroupURL(finalURL);
             GroupSchedule schedule = scheduler.GetSchedule(finalURL);
             if (schedule.count != 0)
             {
                 FillThePage(schedule);
-                Application.Current.Properties["LastUpdated"] = DateTime.Now;
-                DependencyService.Get<IScheduleSaver>().SaveScheduleAsync("schedule.sch", schedule);
+                DependencyService.Get<IScheduleSaver>().SaveObject<DateTime>("LastUpdated.date", DateTime.Now);
+                DependencyService.Get<IScheduleSaver>().SaveObject("schedule.sch", schedule);
             }
             else
             {
@@ -71,7 +77,7 @@ namespace Schedule
 
         private void GetFromMemory()
         {
-            GroupSchedule schedule = DependencyService.Get<IScheduleSaver>().LoadScheduleAsync("schedule.sch");
+            GroupSchedule schedule = DependencyService.Get<IScheduleSaver>().LoadSavedObject<GroupSchedule>("schedule.sch");
             if (schedule.count != 0)
                 FillThePage(schedule);
             else
@@ -98,7 +104,7 @@ namespace Schedule
             if (schedule != null)
                 foreach (Day d in schedule.days)
                 {
-                    Children.Add(new PageWithList(d.lessons, d.date.Replace("-",".")));
+                    Children.Add(new PageWithList(d.lessons, d.date.Replace("-", ".")));
                 }
             else
                 throw new Exception();

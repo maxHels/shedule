@@ -7,9 +7,11 @@ namespace Schedule
 {
     public interface IScheduleSaver
     {
-        bool ExistAsync(string fileName);
-        void SaveScheduleAsync(string fileName, GroupSchedule schedule);
-        GroupSchedule LoadScheduleAsync(string fileName);
+        bool Exist(string fileName);
+        void SaveObject<T>(string fileName, T schedule);
+        void SaveText(string fileName, string text);
+        T LoadSavedObject<T>(string fileName);
+        string LoadText(string fileName);
         Task<IEnumerable<string>> GetFilesASync();
     }
 }

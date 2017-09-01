@@ -20,7 +20,7 @@ namespace Schedule.Droid
 {
     class ScheduleSaver : IScheduleSaver
     {
-        public bool ExistAsync(string fileName)
+        public bool Exist(string fileName)
         {
             string filepath = GetFilePath(fileName);
             bool exists = File.Exists(filepath);
@@ -34,7 +34,7 @@ namespace Schedule.Droid
             return Task<IEnumerable<string>>.FromResult(filenames);
         }
 
-        public GroupSchedule LoadScheduleAsync(string fileName)
+        public T LoadSavedObject<T>(string fileName)
         {
             string filepath = GetFilePath(fileName);
             try
@@ -42,25 +42,25 @@ namespace Schedule.Droid
                 using (Stream input = File.OpenRead(filepath))
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
-                    GroupSchedule schedule;
-                    schedule =(GroupSchedule)formatter.Deserialize(input);
+                    T schedule;
+                    schedule = (T)formatter.Deserialize(input);
                     input.Close();
                     return schedule;
                 }
             }
             catch
             {
-                return null;
+                return default(T);
             }
         }
 
-        public void SaveScheduleAsync(string fileName, GroupSchedule schedule)
+        public void SaveObject<T>(string fileName, T objectToSave)
         {
             string filePath = GetFilePath(fileName);
             using (Stream output = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 BinaryFormatter writer = new BinaryFormatter();
-                writer.Serialize(output, schedule);
+                writer.Serialize(output, objectToSave);
                 output.Close();
             }
         }
@@ -76,5 +76,29 @@ namespace Schedule.Droid
 
         }
 
+        public async void SaveText(string fileName, string text)
+        {
+            string filePath = GetFilePath(fileName);
+            using (StreamWriter textWriter = File.CreateText(filePath))
+            {
+                await textWriter.WriteAsync(text);
+            }
+        }
+
+        public string LoadText(string fileName)
+        {
+            string filePath = GetFilePath(fileName);
+            try
+            {
+                using (StreamReader sr = File.OpenText(filePath))
+                {
+                    return sr.ReadToEnd();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

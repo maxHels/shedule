@@ -73,8 +73,8 @@ namespace Schedule
 
         private async void getSchedule_Clicked(object sender, EventArgs e)
         {
-            Application.Current.Properties["UpdatedGroupURL"] = DateTime.Today;
-            Application.Current.Properties["GroupURL"] = finalURL;
+            Application.Current.Properties["LastGroupChoice"] = finalURL;
+            DependencyService.Get<IScheduleSaver>().SaveText("groupURL.txt", finalURL);
             await Navigation.PushAsync(new ScheduleViewingPage());
         }
     }
