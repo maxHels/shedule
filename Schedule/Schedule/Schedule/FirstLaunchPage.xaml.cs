@@ -35,6 +35,8 @@ namespace Schedule
             groupPicker.SelectedIndexChanged += onFinalUrlCreation;
         }
 
+        
+
         private void onFinalUrlCreation(object sender, EventArgs e)
         {
             if (groupPicker.SelectedItem != null)
