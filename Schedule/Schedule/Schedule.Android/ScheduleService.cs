@@ -34,7 +34,7 @@ namespace Schedule.Droid
                 AutoReset = true,
             };
             timer.Elapsed += TimeToCheck;
-
+            timer.Start();
         }
 
         private void TimeToCheck(object sender, ElapsedEventArgs e)

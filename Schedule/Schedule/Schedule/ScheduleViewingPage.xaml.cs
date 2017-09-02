@@ -17,7 +17,7 @@ namespace Schedule
             InitializeComponent();
             try
             {
-                ToolbarItem alarmSet = new ToolbarItem()
+                ToolbarItem alarmSet = new ToolbarItem() //добавляем в тулбар будильник
                 {
                     Icon = "clock.png",
                 };
@@ -25,8 +25,8 @@ namespace Schedule
                 ToolbarItems.Add(alarmSet);
 
 
-                if (DependencyService.Get<IScheduleSaver>().Exist("schedule.sch")
-                    && Application.Current.Properties.ContainsKey("LastGroupChoice")
+                if (DependencyService.Get<IScheduleSaver>().Exist("schedule.sch") //если расписание загружалось меньше часа назад и группа не была изменена
+                    && Application.Current.Properties.ContainsKey("LastGroupChoice")//, то считываем сохраненное расписание из файла
                     && (string)Application.Current.Properties["LastGroupChoice"] == DependencyService.Get<IScheduleSaver>().
                     LoadText("groupURL.txt")&&
                     DependencyService.Get<IScheduleSaver>().Exist("LastUpdated.date"))
@@ -39,18 +39,18 @@ namespace Schedule
                     else
                         GetFromServer();
                 }
-                else
+                else //в других случаях загружаем с сервера
                 {
                     GetFromServer();
                 }
             }
-            catch
+            catch //если что-то пошло не так показываем сообщение о том, что нет доступного расписания
             {
                 NoSchedule();
             }
         }
 
-        private void AlarmSet(object sender, EventArgs e)
+        private void AlarmSet(object sender, EventArgs e) //нажатие на будильник
         {
             DateTime dayForAlarm = DateTime.Parse(this.CurrentPage.Title);
             DependencyService.Get<IAlarm>().SetAlarm((int)dayForAlarm.DayOfWeek);
@@ -63,13 +63,13 @@ namespace Schedule
             Application.Current.Properties["LastGroupChoice"] = finalURL;
             finalURL = scheduler.MakeGroupURL(finalURL);
             GroupSchedule schedule = scheduler.GetSchedule(finalURL);
-            if (schedule.count != 0)
+            if (schedule.count != 0) //если вернулся хоть один день
             {
                 FillThePage(schedule);
                 DependencyService.Get<IScheduleSaver>().SaveObject<DateTime>("LastUpdated.date", DateTime.Now);
                 DependencyService.Get<IScheduleSaver>().SaveObject("schedule.sch", schedule);
             }
-            else
+            else //если нет расписания
             {
                 NoSchedule();
             }
@@ -78,9 +78,9 @@ namespace Schedule
         private void GetFromMemory()
         {
             GroupSchedule schedule = DependencyService.Get<IScheduleSaver>().LoadSavedObject<GroupSchedule>("schedule.sch");
-            if (schedule.count != 0)
+            if (schedule.count != 0) //если сохранен хоть один день
                 FillThePage(schedule);
-            else
+            else //если нет расписания
                 NoSchedule();
         }
 

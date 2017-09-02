@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,9 +9,9 @@ namespace Schedule
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FirstLaunchPage : ContentPage
 	{
-        JSONArray faculties, departments, groups;
-        List<string> Faculties, Departments, Groups;
-        string finalURL, groupURL;
+        JSONArray faculties, departments, groups; //переменные для сщхранения данных, полученных от сервера
+        List<string> Faculties, Departments, Groups; //здесь те же самые данные, на хранятся в листе для последующего заполнения UI
+        string finalURL, groupURL; //строки, хранящие адреса переменных для получения расписания
         RequestSender requestSender = new RequestSender();
         JSONParser parser = new JSONParser();
 
@@ -23,22 +19,22 @@ namespace Schedule
         {
             InitializeComponent();
             choosenTreatise.Text = treatiseSelector.Value.ToString();
-            faculties = parser.JSONToObjectParsing<JSONArray>(requestSender.sendRequest("http://api.grsu.by/1.x/app1/getFaculties"));
-            Faculties = parser.ToListWithoutId(faculties);
-            facultyPicker.ItemsSource = Faculties;
-            facultyPicker.SelectedIndexChanged += onGroupCreating;
-            departmentPicker.SelectedIndexChanged += onGroupCreating;
-            departments = parser.JSONToObjectParsing<JSONArray>(requestSender.sendRequest("http://api.grsu.by/1.x/app1/getDepartments"));
-            Departments = parser.ToListWithoutId(departments);
-            departmentPicker.ItemsSource = Departments;
-            treatiseSelector.ValueChanged += onGroupCreating;
-            groupPicker.SelectedIndexChanged += onFinalUrlCreation;
+            faculties = parser.JSONToObjectParsing<JSONArray>(requestSender.sendRequest("http://api.grsu.by/1.x/app1/getFaculties")); //получение факультетов
+            Faculties = parser.ToListWithoutId(faculties); //кладем названия факультетов в лист
+            facultyPicker.ItemsSource = Faculties; //присваиваем 1ому списку лист с факультетами
+            facultyPicker.SelectedIndexChanged += OnGroupCreating;
+            departmentPicker.SelectedIndexChanged += OnGroupCreating;
+            departments = parser.JSONToObjectParsing<JSONArray>(requestSender.sendRequest("http://api.grsu.by/1.x/app1/getDepartments"));//получение форм образованя
+            Departments = parser.ToListWithoutId(departments);//формы образования в лист
+            departmentPicker.ItemsSource = Departments;//присваиваем 2ому списку лист формами образ
+            treatiseSelector.ValueChanged += OnGroupCreating;
+            groupPicker.SelectedIndexChanged += OnFinalUrlCreation;
         }
 
         
 
-        private void onFinalUrlCreation(object sender, EventArgs e)
-        {
+        private void OnFinalUrlCreation(object sender, EventArgs e) //метод, составляющий URL для получения расписания конкретной группы
+        {                                                           
             if (groupPicker.SelectedItem != null)
             {
                 finalURL = "http://api.grsu.by/1.x/app1/getGroupSchedule?groupId=";
@@ -48,14 +44,14 @@ namespace Schedule
             }
         }
 
-        private void onGroupCreating(object sender, EventArgs e)
+        private void OnGroupCreating(object sender, EventArgs e)
         {
             choosenTreatise.Text = treatiseSelector.Value.ToString();
-            groupCreating();           
+            GroupCreating();           
         }
 
-        private void groupCreating()
-        {
+        private void GroupCreating() //составляет URL для получения групп, в зависимости от выбранного курса, факультета и формы образования
+        {                           
             groupURL = "http://api.grsu.by/1.x/app1/getGroups?departmentId=";
             if (facultyPicker.SelectedIndex != -1 && departmentPicker.SelectedIndex != -1)
             {
@@ -73,11 +69,10 @@ namespace Schedule
         }
 
 
-        private async void getSchedule_Clicked(object sender, EventArgs e)
+        private async void GetSchedule_Clicked(object sender, EventArgs e) //нажатие на кнопку получить расписание
         {
-            Application.Current.Properties["LastGroupChoice"] = finalURL;
-            DependencyService.Get<IScheduleSaver>().SaveText("groupURL.txt", finalURL);
-            await Navigation.PushAsync(new ScheduleViewingPage());
+            DependencyService.Get<IScheduleSaver>().SaveText("groupURL.txt", finalURL);//сохраняем URl для получения группы
+            await Navigation.PushAsync(new ScheduleViewingPage()); //переход на след. страницу
         }
     }
 }

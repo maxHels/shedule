@@ -14,7 +14,7 @@
                 <Stepper Value="1" Minimum="1" Maximum="5" Increment="1" x:Name="treatiseSelector" HorizontalOptions="Center"></Stepper>
                 <Label Text="Группа" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="Center"></Label>
                 <Picker Title="Выберите группу..." x:Name="groupPicker" IsEnabled="False"></Picker>
-                <Button x:Name="getSchedule" Text="Получить расписание..." Clicked="getSchedule_Clicked" IsEnabled="False" BorderRadius="50" 
+                <Button x:Name="getSchedule" Text="Получить расписание..." Clicked="GetSchedule_Clicked" IsEnabled="False" BorderRadius="50" 
                         BackgroundColor="White" BorderColor="Blue" BorderWidth="5"></Button>
             </StackLayout>
         </ScrollView>

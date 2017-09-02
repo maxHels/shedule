@@ -19,7 +19,7 @@ namespace Schedule
                 Title="Меню",
             };
             Master = masterPage;
-            if (Application.Current.Properties.ContainsKey("GroupURL"))
+            if (Application.Current.Properties.ContainsKey("GroupURL")) //если приложение запускается не первый раз
             {   
                 Title = "Расписание";
                 Detail = new ScheduleViewingPage();

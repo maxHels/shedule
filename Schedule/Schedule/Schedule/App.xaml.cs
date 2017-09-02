@@ -12,7 +12,7 @@ namespace Schedule
 		public App ()
 		{
 			InitializeComponent();
-            MainPage = new NavigationPage(new MenuPage());
+            MainPage = new NavigationPage(new MenuPage()); //запускаем страницу с "гамбургером"
         }
 
 		protected override void OnStart ()
