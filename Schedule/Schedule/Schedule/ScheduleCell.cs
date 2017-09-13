@@ -3,32 +3,53 @@ using Xamarin.Forms;
 
 namespace Schedule
 {
-    class ScheduleCell:ViewCell
+    class ScheduleCell : ViewCell
     {
-        Label title,descr, startTime, finishTime, teacher, address, room, subgroup;
+        Label title, descr, startTime, finishTime, teacher, address, room, subgroup;
         string date;
         public ScheduleCell(string date)
         {
             this.date = date;
 
-            title = new Label();
-            title.HorizontalTextAlignment = TextAlignment.Center;
-            descr = new Label();
-            descr.HorizontalTextAlignment = TextAlignment.Start;
-            startTime = new Label();
-            startTime.HorizontalTextAlignment = TextAlignment.End;
-            finishTime = new Label();
-            finishTime.HorizontalTextAlignment = TextAlignment.End;
-            teacher = new Label();
-            teacher.HorizontalTextAlignment = TextAlignment.Center;
-            address = new Label();
-            address.HorizontalTextAlignment = TextAlignment.Start;
-            room = new Label();
-            room.HorizontalTextAlignment = TextAlignment.Start;
-            subgroup = new Label();
-            subgroup.HorizontalTextAlignment = TextAlignment.Center;
-
-
+            title = new Label()
+            {
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontAttributes = FontAttributes.Bold,
+                FontSize=15,
+            };
+            startTime = new Label()
+            {
+                HorizontalTextAlignment = TextAlignment.End,
+                FontAttributes = FontAttributes.Bold,
+            };
+            finishTime = new Label()
+            {
+                HorizontalTextAlignment = TextAlignment.End,
+                FontAttributes = FontAttributes.Bold,
+            };
+            teacher = new Label()
+            {
+                HorizontalTextAlignment = TextAlignment.Center
+            };
+            address = new Label()
+            {
+                HorizontalTextAlignment = TextAlignment.Start
+            };
+            room = new Label()
+            {
+                HorizontalTextAlignment = TextAlignment.Start
+            };
+            subgroup = new Label()
+            {
+                HorizontalTextAlignment = TextAlignment.Center,
+                HorizontalOptions=LayoutOptions.Center,   
+            };
+            descr = new Label()
+            {
+                HorizontalTextAlignment = TextAlignment.Center,
+                LineBreakMode = LineBreakMode.WordWrap,
+                HorizontalOptions = LayoutOptions.Center,
+            };
             StackLayout cell = new StackLayout() { Orientation = StackOrientation.Vertical };
             StackLayout temlateCell = new StackLayout() { Orientation = StackOrientation.Horizontal };
 
@@ -40,7 +61,7 @@ namespace Schedule
             StackLayout titleLayout = new StackLayout()
             {
                 Orientation = StackOrientation.Vertical,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.Center,
             };
             StackLayout descriptionlayout = new StackLayout()
             {
@@ -60,7 +81,7 @@ namespace Schedule
             timeLayout.Children.Add(timeGrid);
 
 
-            Grid titleGrid = new Grid();
+            Grid titleGrid = new Grid() {WidthRequest=230, HorizontalOptions=LayoutOptions.Center, };
             titleGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             titleGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
@@ -110,7 +131,7 @@ namespace Schedule
         public static readonly BindableProperty AddressProperty = BindableProperty.Create("address", typeof(string), typeof(ScheduleCell), "");
         public static readonly BindableProperty RoomProperty = BindableProperty.Create("room", typeof(string), typeof(ScheduleCell), "");
         public static readonly BindableProperty SubgroupProperty = BindableProperty.Create("subgroup", typeof(string), typeof(ScheduleCell), "Нет подгруппы");
-        
+
         public string Subgroup
         {
             get { return (string)GetValue(SubgroupProperty); }

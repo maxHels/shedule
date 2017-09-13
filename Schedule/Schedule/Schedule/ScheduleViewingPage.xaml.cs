@@ -24,17 +24,19 @@ namespace Schedule
                 alarmSet.Clicked += AlarmSet;
                 ToolbarItems.Add(alarmSet);
 
-
+                
                 if (DependencyService.Get<IScheduleSaver>().Exist("schedule.sch") //если расписание загружалось меньше часа назад и группа не была изменена
                     && Application.Current.Properties.ContainsKey("LastGroupChoice")//, то считываем сохраненное расписание из файла
                     && (string)Application.Current.Properties["LastGroupChoice"] == DependencyService.Get<IScheduleSaver>().
                     LoadText("groupURL.txt")&&
-                    DependencyService.Get<IScheduleSaver>().Exist("LastUpdated.date"))
+                    DependencyService.Get<IScheduleSaver>().Exist("LastUpdated.date")
+                    &&Application.Current.Properties.ContainsKey("CanLoadOld")&&(bool)Application.Current.Properties["CanLoadOld"])
                 {
                     TimeSpan tp = new TimeSpan(1, 0, 0);
                     DateTime oldtime = DependencyService.Get<IScheduleSaver>().LoadSavedObject<DateTime>("LastUpdated.date");
                     DateTime thistime = DateTime.Now;
-                    if (tp >= oldtime - thistime)
+                    TimeSpan span = thistime - oldtime;
+                    if (TimeSpan.Compare(span,tp)==-1)
                         GetFromMemory();
                     else
                         GetFromServer();
@@ -48,11 +50,12 @@ namespace Schedule
             {
                 NoSchedule();
             }
+            Application.Current.Properties["CanLoadOld"] = true;
         }
 
         private void AlarmSet(object sender, EventArgs e) //нажатие на будильник
         {
-            DateTime dayForAlarm = DateTime.Parse(this.CurrentPage.Title);
+            DateTime dayForAlarm = DateTime.Parse(CurrentPage.Title);
             DependencyService.Get<IAlarm>().SetAlarm((int)dayForAlarm.DayOfWeek);
         }
 
@@ -60,6 +63,7 @@ namespace Schedule
         {
             GroupScheduler scheduler = new GroupScheduler();
             string finalURL = DependencyService.Get<IScheduleSaver>().LoadText("groupURL.txt");
+            Application.Current.Properties["GroupURL"] = finalURL;
             Application.Current.Properties["LastGroupChoice"] = finalURL;
             finalURL = scheduler.MakeGroupURL(finalURL);
             GroupSchedule schedule = scheduler.GetSchedule(finalURL);
@@ -104,7 +108,7 @@ namespace Schedule
             if (schedule != null)
                 foreach (Day d in schedule.days)
                 {
-                    Children.Add(new PageWithList(d.lessons, d.date.Replace("-", ".")));
+                    Children.Add(new PageWithList(d.lessons,d.date));
                 }
             else
                 throw new Exception();

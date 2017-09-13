@@ -11,7 +11,7 @@ namespace Schedule
 {
     public class RequestSender
     {
-        public string sendRequest(string URL)
+        public string SendRequest(string URL)
         {
             try
             {

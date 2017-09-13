@@ -22,7 +22,7 @@ namespace Schedule.Droid
         public void ShowText(string text)
         {
             c = Forms.Context;
-            Toast.MakeText(c, text, ToastLength.Long);
+            Toast.MakeText(c, text, ToastLength.Long).Show();
         }
     }
 }

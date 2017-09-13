@@ -19,12 +19,12 @@ namespace Schedule
         {
             InitializeComponent();
             choosenTreatise.Text = treatiseSelector.Value.ToString();
-            faculties = parser.JSONToObjectParsing<JSONArray>(requestSender.sendRequest("http://api.grsu.by/1.x/app1/getFaculties")); //получение факультетов
+            faculties = parser.JSONToObjectParsing<JSONArray>(requestSender.SendRequest("http://api.grsu.by/1.x/app1/getFaculties")); //получение факультетов
             Faculties = parser.ToListWithoutId(faculties); //кладем названия факультетов в лист
             facultyPicker.ItemsSource = Faculties; //присваиваем 1ому списку лист с факультетами
             facultyPicker.SelectedIndexChanged += OnGroupCreating;
             departmentPicker.SelectedIndexChanged += OnGroupCreating;
-            departments = parser.JSONToObjectParsing<JSONArray>(requestSender.sendRequest("http://api.grsu.by/1.x/app1/getDepartments"));//получение форм образованя
+            departments = parser.JSONToObjectParsing<JSONArray>(requestSender.SendRequest("http://api.grsu.by/1.x/app1/getDepartments"));//получение форм образованя
             Departments = parser.ToListWithoutId(departments);//формы образования в лист
             departmentPicker.ItemsSource = Departments;//присваиваем 2ому списку лист формами образ
             treatiseSelector.ValueChanged += OnGroupCreating;
@@ -60,7 +60,7 @@ namespace Schedule
                 groupURL += faculties.items[facultyPicker.SelectedIndex].id;
                 groupURL += "&course=";
                 groupURL += treatiseSelector.Value.ToString();
-                groups = new JSONParser().JSONToObjectParsing<JSONArray>(new RequestSender().sendRequest(groupURL));
+                groups = new JSONParser().JSONToObjectParsing<JSONArray>(new RequestSender().SendRequest(groupURL));
                 Groups = new JSONParser().ToListWithoutId(groups);
                 groupPicker.SelectedItem = null;
                 groupPicker.ItemsSource = Groups;

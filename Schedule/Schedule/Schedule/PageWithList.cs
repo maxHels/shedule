@@ -1,15 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Schedule
 {
     class PageWithList : ContentPage
     {
-        
+        private ListView lv;
         public PageWithList(Lesson[] lessons, string title)
         {
-            Title = title;
-            ListView lv = new ListView() { ItemTemplate = new DataTemplate(() =>
+            DateTime day = Convert.ToDateTime(title);
+            Title = day.ToString("ddd");
+            StackLayout sl = new StackLayout() { Spacing=20};
+            Label date = new Label()
+            {
+                Text = day.ToString("dd MMMM"),
+                FontAttributes=FontAttributes.Bold,
+                HorizontalOptions=LayoutOptions.Center,
+                HorizontalTextAlignment=TextAlignment.Center,
+                FontSize=20,
+                TextColor=Color.Accent,
+            };
+            lv = new ListView()
+            {
+                ItemTemplate = new DataTemplate(() =>
              {
                  ScheduleCell sch = new ScheduleCell(Title) { };
                  sch.SetBinding(ScheduleCell.TitleProperty, "title");
@@ -22,14 +36,21 @@ namespace Schedule
                  sch.SetBinding(ScheduleCell.SubgroupProperty, "subgroup.title");
                  return sch;
              })
-                , ItemsSource = lessons, HasUnevenRows = true, SeparatorColor=Color.Blue, IsPullToRefreshEnabled=true, };
-            lv.Refreshing += ScheduleFefreshing;
-            Content = lv;
+                ,
+                ItemsSource = lessons,
+                HasUnevenRows = true,
+                SeparatorColor = Color.Blue,
+                IsPullToRefreshEnabled = false,
+            };
+            lv.ItemTapped += Lv_ItemTapped;
+            sl.Children.Add(date);
+            sl.Children.Add(lv);
+            Content = sl;
         }
 
-        private void ScheduleFefreshing(object sender, System.EventArgs e)
+        private void Lv_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            
+            lv.SelectedItem = null;
         }
     }
 }

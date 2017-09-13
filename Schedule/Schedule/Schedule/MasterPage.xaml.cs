@@ -15,6 +15,7 @@ namespace Schedule
         public ListView ListView { get { return listView; } }
 		public MasterPage ()
 		{
+            
 			InitializeComponent ();
             var masterPageItem = new List<MasterPageItem>();
             masterPageItem.Add(new MasterPageItem
@@ -26,12 +27,23 @@ namespace Schedule
             masterPageItem.Add(new MasterPageItem
             {
                 Title = "Расписание",
-                Detail="",
+                Detail = "",
                 TargetType = typeof(ScheduleViewingPage),
+            });
+            masterPageItem.Add(new MasterPageItem
+            {
+                Title="Настройки",
+                Detail="",
+                TargetType=typeof(SettingsPage),
             });
             listView.BindingContext = this;
             listView.ItemsSource = masterPageItem;
-            
+            listView.ItemTemplate = new DataTemplate(() =>
+              {
+                  TextCell textCell = new TextCell() { TextColor = Color.Accent };
+                  textCell.SetBinding(TextCell.TextProperty, "Title");
+                  return textCell;
+              });
 		}
     }
 }

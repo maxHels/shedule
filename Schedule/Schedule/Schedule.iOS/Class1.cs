@@ -8,7 +8,7 @@ using UIKit;
 
 namespace Schedule.iOS
 {
-    class Class1 : IService,INative
+    class Class1 : INative
     {
         public GroupSchedule GetGroupSchedule(string URL)
         {

@@ -21,10 +21,11 @@ namespace Schedule.Droid
 
             base.OnCreate(bundle);
 
+            StartService(new Intent(this, typeof(ScheduleService)));
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new Schedule.App());
 
-            StartService(new Intent(this, typeof(ScheduleService)));
         }
     }
 }

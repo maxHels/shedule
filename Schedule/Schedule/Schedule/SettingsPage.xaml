@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Schedule.SettingsPage"
+             Title="Настройки">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Как часто обновлять расписание?" FontAttributes="Bold" FontSize="Medium" HorizontalOptions="Center"></Label>
+            <Label Text="Часы" HorizontalOptions="Center"></Label> 
+            <Entry Keyboard="Numeric" x:Name="modifyingHours"></Entry>
+            <Label Text="Минуты" HorizontalOptions="Center"></Label>
+            <Entry Keyboard="Numeric" x:Name="modyfyingMinutes"></Entry>
+            <Label Text="На сколько дней показывать расписание?" FontAttributes="Bold" FontSize="Default" HorizontalOptions="CenterAndExpand"></Label>
+            <Entry Keyboard="Numeric" x:Name="daysCount"></Entry>
+            <Button x:Name="savingButton" Clicked="SavingButton_Clicked" Text="Подтвердить изменения"></Button>
+            <Label x:Name="lastChecked" FontSize="Default" Text="Последний раз обновлено:"></Label>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

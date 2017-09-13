@@ -20,18 +20,18 @@ namespace Schedule.Droid
     [Service(Enabled = true)]
     class ScheduleService : Service
     {
-
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
+            CheckSchedule();
             Start();
             return StartCommandResult.Sticky;
         }
 
         private void Start()
         {
-            Timer timer = new Timer(180000)
+            Timer timer = new Timer(60000)
             {
-                AutoReset = true,
+                AutoReset = false,
             };
             timer.Elapsed += TimeToCheck;
             timer.Start();
@@ -42,24 +42,76 @@ namespace Schedule.Droid
             CheckSchedule();
         }
 
+        private void notWithSomeText(int id, string text)
+        {
+            Notification n = new Notification.Builder(this)
+                        .SetContentTitle(text)
+                        .SetSmallIcon(Resource.Drawable.Icon)
+                        .SetAutoCancel(false)
+                        .Build();
+            NotificationManager nm = (NotificationManager)GetSystemService(NotificationService);
+            nm.Notify(id, n);
+        }
+
         private void CheckSchedule()
         {
             ScheduleSaver saver = new ScheduleSaver();
             try
             {
-                TimeSpan interval = new TimeSpan(4, 0, 0);
+                int i = 0;
+                TimeSpan interval;
+                if (saver.Exist("refreshingPeriod.dat"))
+                    interval = saver.LoadSavedObject<TimeSpan>("refreshingPeriod.dat");
+                else
+                    interval = new TimeSpan(4, 0, 0);
+                notWithSomeText(i, interval.ToString());
+                i++;
                 DateTime lastChecked = saver.LoadSavedObject<DateTime>("LastUpdated.date");
+                notWithSomeText(i, "last check:" + lastChecked.ToString());
+                i++;
                 DateTime time = DateTime.Now;
-                if (interval >= time - lastChecked)
+                notWithSomeText(i, "time:" + time.ToString());
+                i++;
+                TimeSpan tp = time - lastChecked;
+                notWithSomeText(i, "tp:" + tp.ToString());
+                i++;
+                if (TimeSpan.Compare(interval,tp)==-1)
                 {
+                    notWithSomeText(i, "if:");
+                    i++;
                     GroupScheduler scheduler = new GroupScheduler();
+                    notWithSomeText(i, "SchedulerCreated");
+                    i++;
                     List<Lesson> addedLessons = new List<Lesson>();
+                    notWithSomeText(i, "Empty list initialized");
+                    i++;
                     string URL = scheduler.MakeGroupURL(saver.LoadText("groupURL.txt"));
+                    notWithSomeText(i, URL);
+                    i++;
                     GroupSchedule oldSchedule = saver.LoadSavedObject<GroupSchedule>("schedule.sch");
+                    notWithSomeText(i, "old schedule count:" + oldSchedule.count.ToString());
+                    i++;
                     GroupSchedule refreshedSchedule = scheduler.GetSchedule(URL);
-                    addedLessons = scheduler.EditedLessons(oldSchedule, refreshedSchedule);
-                    saver.SaveObject<DateTime>("LastUpdated.date", DateTime.Now);
-                    NotificateAboutChanges(addedLessons);
+                    notWithSomeText(i, "new schedule count:" + refreshedSchedule.count.ToString());
+                    i++;
+                    addedLessons = new ScheduleComparer().AddedLessons(oldSchedule, refreshedSchedule);
+                    notWithSomeText(i, "Compared!" + addedLessons.Count.ToString());
+                    i++;
+                    if (addedLessons != null)
+                    {
+                        notWithSomeText(i, "in second if:");
+                        i++;
+                        saver.SaveObject("LastUpdated.date", DateTime.Now);
+                        notWithSomeText(i, "saved date");
+                        i++;
+                        saver.SaveObject("schedule.sch", refreshedSchedule);
+                        notWithSomeText(i, "saved schedule!");
+                        NotificateAboutChanges(addedLessons);
+                    }
+                    else
+                    {
+                        throw new Exception();
+                    }
                 }
             }
             catch
@@ -86,7 +138,7 @@ namespace Schedule.Droid
                         .SetVibrate(new long[] { 1000, 1000, 1000 })
                         .Build();
                     NotificationManager nm = (NotificationManager)GetSystemService(NotificationService);
-                    nm.Notify(0, n);
+                    nm.Notify(50, n);
                 }
             }
         }
@@ -95,7 +147,7 @@ namespace Schedule.Droid
         {
             Notification.Builder b = new Notification.Builder(this);
             NotificationManager manager = (NotificationManager)GetSystemService(NotificationService);
-            if (addedLessons.Count != 0)
+            if (addedLessons.Count!=0)
             {
                 if (addedLessons.Count >= 4)
                 {
