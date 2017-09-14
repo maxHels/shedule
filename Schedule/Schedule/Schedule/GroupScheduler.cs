@@ -20,21 +20,36 @@ namespace Schedule
             preview += date.ToString("dd.MM.yyyy");
             if (DependencyService.Get<IScheduleSaver>().Exist("daysCount.txt"))
             {
-                try
-                {
-                    int n = Convert.ToInt32(DependencyService.Get<IScheduleSaver>().LoadText("daysCount.txt"));
-                    date = date.AddDays(n - 1);
-                }
-                catch
-                {
-                    date = date.AddDays(8);
-                }
+                int n = Convert.ToInt32(DependencyService.Get<IScheduleSaver>().LoadText("daysCount.txt"));
+                date = date.AddDays(n - 1);
             }
             else
+            {
                 date = date.AddDays(8);
+            }
             preview += "&dateEnd=";
             preview += date.ToString("dd.MM.yyyy");
             return preview;
         }
+
+
+        public string MakeGroupURL(string preview, IScheduleSaver checker)
+        {
+            DateTime date = DateTime.Now.Date;
+            preview += date.ToString("dd.MM.yyyy");
+            if (checker.Exist("daysCount.txt"))
+            {
+                int n = Convert.ToInt32(checker.LoadText("daysCount.txt"));
+                date = date.AddDays(n - 1);
+            }
+            else
+            {
+                date = date.AddDays(8);
+            }
+            preview += "&dateEnd=";
+            preview += date.ToString("dd.MM.yyyy");
+            return preview;
+        }
+
     }
 }

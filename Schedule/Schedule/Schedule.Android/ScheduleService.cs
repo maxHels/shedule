@@ -22,7 +22,6 @@ namespace Schedule.Droid
     {
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
-            CheckSchedule();
             Start();
             return StartCommandResult.Sticky;
         }
@@ -31,7 +30,7 @@ namespace Schedule.Droid
         {
             Timer timer = new Timer(60000)
             {
-                AutoReset = false,
+                AutoReset = true,
             };
             timer.Elapsed += TimeToCheck;
             timer.Start();
@@ -58,54 +57,26 @@ namespace Schedule.Droid
             ScheduleSaver saver = new ScheduleSaver();
             try
             {
-                int i = 0;
                 TimeSpan interval;
                 if (saver.Exist("refreshingPeriod.dat"))
                     interval = saver.LoadSavedObject<TimeSpan>("refreshingPeriod.dat");
                 else
                     interval = new TimeSpan(4, 0, 0);
-                notWithSomeText(i, interval.ToString());
-                i++;
                 DateTime lastChecked = saver.LoadSavedObject<DateTime>("LastUpdated.date");
-                notWithSomeText(i, "last check:" + lastChecked.ToString());
-                i++;
                 DateTime time = DateTime.Now;
-                notWithSomeText(i, "time:" + time.ToString());
-                i++;
                 TimeSpan tp = time - lastChecked;
-                notWithSomeText(i, "tp:" + tp.ToString());
-                i++;
                 if (TimeSpan.Compare(interval,tp)==-1)
                 {
-                    notWithSomeText(i, "if:");
-                    i++;
                     GroupScheduler scheduler = new GroupScheduler();
-                    notWithSomeText(i, "SchedulerCreated");
-                    i++;
                     List<Lesson> addedLessons = new List<Lesson>();
-                    notWithSomeText(i, "Empty list initialized");
-                    i++;
-                    string URL = scheduler.MakeGroupURL(saver.LoadText("groupURL.txt"));
-                    notWithSomeText(i, URL);
-                    i++;
+                    string URL = scheduler.MakeGroupURL(saver.LoadText("groupURL.txt"),saver);
                     GroupSchedule oldSchedule = saver.LoadSavedObject<GroupSchedule>("schedule.sch");
-                    notWithSomeText(i, "old schedule count:" + oldSchedule.count.ToString());
-                    i++;
                     GroupSchedule refreshedSchedule = scheduler.GetSchedule(URL);
-                    notWithSomeText(i, "new schedule count:" + refreshedSchedule.count.ToString());
-                    i++;
                     addedLessons = new ScheduleComparer().AddedLessons(oldSchedule, refreshedSchedule);
-                    notWithSomeText(i, "Compared!" + addedLessons.Count.ToString());
-                    i++;
                     if (addedLessons != null)
                     {
-                        notWithSomeText(i, "in second if:");
-                        i++;
                         saver.SaveObject("LastUpdated.date", DateTime.Now);
-                        notWithSomeText(i, "saved date");
-                        i++;
                         saver.SaveObject("schedule.sch", refreshedSchedule);
-                        notWithSomeText(i, "saved schedule!");
                         NotificateAboutChanges(addedLessons);
                     }
                     else
