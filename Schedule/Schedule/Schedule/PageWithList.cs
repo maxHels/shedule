@@ -19,7 +19,7 @@ namespace Schedule
                 HorizontalOptions=LayoutOptions.Center,
                 HorizontalTextAlignment=TextAlignment.Center,
                 FontSize=20,
-                TextColor=Color.Accent,
+                TextColor= Color.FromRgb(255, 64, 129),
             };
             lv = new ListView()
             {

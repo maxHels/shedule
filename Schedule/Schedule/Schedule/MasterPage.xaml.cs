@@ -40,7 +40,7 @@ namespace Schedule
             listView.ItemsSource = masterPageItem;
             listView.ItemTemplate = new DataTemplate(() =>
               {
-                  TextCell textCell = new TextCell() { TextColor = Color.Accent };
+                  TextCell textCell = new TextCell() { TextColor = Color.FromRgb(255,64,129), };
                   textCell.SetBinding(TextCell.TextProperty, "Title");
                   return textCell;
               });
