@@ -55,8 +55,9 @@ namespace Schedule
 
         private void AlarmSet(object sender, EventArgs e) //нажатие на будильник
         {
-            DateTime dayForAlarm = DateTime.Parse(CurrentPage.Title);
-            DependencyService.Get<IAlarm>().SetAlarm((int)dayForAlarm.DayOfWeek);
+            //DateTime dayForAlarm = DateTime.Parse(CurrentPage.Title);
+            //DependencyService.Get<IAlarm>().SetAlarm((int)dayForAlarm.DayOfWeek);
+            DependencyService.Get<IAlarm>().SetAlarm();
         }
 
         private void GetFromServer()

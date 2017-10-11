@@ -17,14 +17,17 @@ using Android.Support.V4.App;
 [assembly: Dependency(typeof(Schedule.Droid.ScheduleService))]
 namespace Schedule.Droid
 {
-    [Service(Enabled = true)]
+    [Service(Enabled =true)]
     class ScheduleService : Service
     {
+        [return:Android.Runtime.GeneratedEnum]
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
             Start();
             return StartCommandResult.Sticky;
         }
+        
+        
 
         private void Start()
         {
@@ -36,12 +39,18 @@ namespace Schedule.Droid
             timer.Start();
         }
 
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            NotWithSomeText(1, "Service destroyed");
+        }
+
         private void TimeToCheck(object sender, ElapsedEventArgs e)
         {
             CheckSchedule();
         }
 
-        private void notWithSomeText(int id, string text)
+        private void NotWithSomeText(int id, string text)
         {
             Notification n = new Notification.Builder(this)
                         .SetContentTitle(text)
